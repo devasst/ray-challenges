@@ -1,0 +1,15 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.24)
+
+PROJECT(ray-challenges)
+
+FIND_PACKAGE(OpenGL REQUIRED)
+
+ADD_SUBDIRECTORY(raylib)
+INCLUDE_DIRECTORIES(include)
+
+#ADD_LIBRARY(raylib SHARED IMPORTED)
+SET_TARGET_PROPERTIES(raylib PROPERTIES BUILD_SHARED_LIBS ON)
+
+ADD_EXECUTABLE(ray-challenges main.cpp src/Particle.cpp include/Particle.h)
+TARGET_LINK_LIBRARIES(ray-challenges raylib)
+TARGET_LINK_LIBRARIES(ray-challenges OpenGL::GL)
