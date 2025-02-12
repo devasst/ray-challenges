@@ -2,7 +2,7 @@
 *
 *   ray-challenges using raylib - particle simulation
 *
-*   Copyright (c) 2014 Adrian Santiago (@devasst)
+*   Copyright (c) 2024 Adrian Santiago (@devasst)
 *
 ********************************************************************************************/
 
@@ -12,9 +12,9 @@
 #include "Particle.h"
 #include "external/glad.h"
 
-#define NUM_PARTICLES 1000
-#define MAX_SPEED 500
-#define BALL_RADIUS 5
+#define NUM_PARTICLES 2000
+#define MAX_SPEED 100
+#define BALL_RADIUS 2
 
 
 //------------------------------------------------------------------------------------
@@ -59,14 +59,13 @@ int main(void)
         //-----------------------------------------------------
         // Update
         //-----------------------------------------------------
-
         if (IsKeyPressed(KEY_SPACE)) pause = !pause;
 
         if (!pause) {
             for (int i = 0; i < NUM_PARTICLES; i++) {
                 auto old_position = particles[i].get_pos();
                 auto old_speed = particles[i].get_speed();
-                auto new_position = particles[i].update_pos(deltaTime);
+                auto new_position = particles[i].update_mov(deltaTime);
 
                 // Check walls collision for bouncing
                 if ((new_position.x >= static_cast<float>(GetScreenWidth() - BALL_RADIUS)) ||
@@ -76,6 +75,8 @@ int main(void)
                 if ((new_position.y >= static_cast<float>(GetScreenHeight() - BALL_RADIUS)) ||
                     (new_position.y <= BALL_RADIUS)) {
                     particles[i].invert_speedY();
+                    auto speed = particles[i].get_speed();
+                    particles[i].set_speed({speed.x, speed.y * particles[i].get_bouncing_ratio()});
                     if (new_position.y >= static_cast<float>(GetScreenHeight() - BALL_RADIUS)){
                         particles[i].set_posY(static_cast<float>(GetScreenHeight() - BALL_RADIUS));
                     }
@@ -125,8 +126,6 @@ int main(void)
         EndDrawing();
         glFinish();
         //-----------------------------------------------------
-
-
     }
 
     // De-Initialization

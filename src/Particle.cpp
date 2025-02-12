@@ -1,6 +1,8 @@
-//
-// Created by adri on 29/07/24.
-//
+/**
+ * Implementation of Class for individual particles
+ *
+ * Created by devasst on 29/07/24.
+*/
 
 #include "../include/Particle.h"
 
@@ -39,6 +41,9 @@ void Particle::set_mass(float m) {
 void Particle::set_gravity(float g) {
     this->gravity = g;
 }
+void Particle::set_bouncing_ratio(float b){
+    this->bouncing_ratio = b;
+}
 void Particle::invert_speedX(){
     this->speed.x *= -1.0f;
 }
@@ -57,9 +62,12 @@ Vector2 Particle::get_accel(){
 float Particle::get_mass(){
     return this->mass;
 }
-Vector2 Particle::update_pos(float deltaTime) {
+float Particle::get_bouncing_ratio(){
+    return this->bouncing_ratio;
+}
+Vector2 Particle::update_mov(float deltaTime) {
     if (this->gravity != 0){
-        this->acceleration.y += this->gravity * this->mass / this->position.y;
+        this->acceleration.y += this->gravity * this->mass;
     }
 
     this->speed.x += this->acceleration.x * deltaTime;
